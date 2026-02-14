@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Olympic Dashboard 1280x720</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f3f6f9;
+            --bg-card: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #94a3b8;
+            --card-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --blue: #1e1b4b;
+            --gold: #fbbf24;
+            --silver: #94a3b8;
+            --bronze: #b45309;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            width: 1280px;
+            height: 720px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- БОКОВОЕ МЕНЮ --- */
+        .sidebar {
+            width: 180px;
+            background: white;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex-shrink: 0;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .logo { margin-bottom: 10px; display: flex; flex-direction: column; align-items: center;}
+        .logo-icon { font-size: 28px; line-height: 1; margin-bottom: 4px; }
+        .logo-text { font-weight: 800; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dark); }
+
+        .filter-group label { 
+            display: block; font-size: 9px; font-weight: 700; color: var(--text-gray); 
+            margin-bottom: 4px; text-transform: uppercase; 
+        }
+        
+        .input-placeholder {
+            width: 100%; height: 30px; 
+            border: 1px solid #e2e8f0; border-radius: 6px; 
+            background: #f8fafc;
+        }
+        .row-inputs { display: flex; gap: 6px; }
+
+        /* Кнопка ОЧИСТИТЬ */
+        .reset-btn-area {
+            margin-top: auto; /* Прижимает кнопку к низу панели */
+            padding-top: 20px;
+        }
+        .reset-btn-placeholder {
+            width: 100%;
+            height: 36px;
+            border: 1px dashed #cbd5e1; /* Пунктир, чтобы вы знали куда ставить кнопку */
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 600;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+
+        /* --- ОСНОВНАЯ ОБЛАСТЬ --- */
+        .main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            flex-shrink: 0;
+            height: 45px;
+        }
+        .header-text h1 { margin: 0; font-size: 20px; font-weight: 700; color: #0f172a; }
+        .header-text p { margin: 2px 0 0; font-size: 10px; color: var(--text-gray); }
+        
+        /* Блок поиска справа */
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .search-label {
+            font-size: 9px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; margin-bottom: 4px;
+        }
+        .search-placeholder {
+            background: white; height: 36px; border-radius: 8px;
+            width: 250px; box-shadow: var(--shadow);
+            display: flex; align-items: center; padding-left: 12px;
+            color: #cbd5e1; font-size: 10px; font-weight: 500;
+        }
+
+        /* --- СЕТКА (GRID) --- */
+        .dashboard-grid {
+            display: grid;
+            flex: 1; 
+            grid-template-columns: repeat(4, 1fr) 240px;
+            grid-template-rows: 80px 1fr 1fr; 
+            gap: 14px;
+            min-height: 0;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--card-radius);
+            padding: 14px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .card-head { margin-bottom: 10px; }
+        
+        .card-head-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .card-title { font-size: 12px; font-weight: 700; color: #0f172a; display: block; }
+        .card-sub { font-size: 8px; font-weight: 600; color: var(--text-gray); text-transform: uppercase; margin-top: 2px; display: block; }
+
+        .mini-stat-group { display: flex; gap: 15px; text-align: right; }
+        .mini-stat-item { display: flex; flex-direction: column; justify-content: flex-start; }
+        .mini-stat-val { font-size: 14px; font-weight: 800; color: var(--blue); line-height: 1; min-height: 14px; }
+        .text-gold { color: var(--gold); }
+        .mini-stat-lbl { font-size: 7px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; margin-top: 3px; }
+        
+        .kpi-card { display: flex; flex-direction: row; align-items: flex-start; gap: 12px; padding: 12px; }
+        .icon-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: white; flex-shrink: 0; }
+        .kpi-text-area { display: flex; flex-direction: column; justify-content: flex-start; padding-top: 2px; }
+        .kpi-label { font-size: 8px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        
+        .bg-total { background: var(--blue); }
+        .bg-gold { background: var(--gold); }
+        .bg-silver { background: var(--silver); }
+        .bg-bronze { background: var(--bronze); }
+
+        .kpi-1 { grid-column: 1 / 2; }
+        .kpi-2 { grid-column: 2 / 3; }
+        .kpi-3 { grid-column: 3 / 4; }
+        .kpi-4 { grid-column: 4 / 5; }
+        .athletes-card { grid-column: 5 / 6; grid-row: 1 / 2; display: flex; flex-direction: row; align-items: center; justify-content: space-between; }
+
+        .map-card { grid-column: 1 / 3; grid-row: 2 / 3; }
+        .sports-card { grid-column: 3 / 5; grid-row: 2 / 3; }
+        .gender-card { grid-column: 1 / 3; grid-row: 3 / 4; }
+        .age-card { grid-column: 3 / 5; grid-row: 3 / 4; }
+        
+        /* Стили для обновленной карточки фактов */
+        .facts-card { 
+            grid-column: 5 / 6; 
+            grid-row: 2 / 4; /* Растягиваем на две строки сетки по вертикали */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pbi-area { flex: 1; }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">⭕</div>
+            <div class="logo-text">Olympic Games</div>
+        </div>
+        
+        <div class="filter-group">
+            <label>Год</label>
+            <div class="row-inputs">
+                <div class="input-placeholder"></div>
+                <div class="input-placeholder"></div>
+            </div>
+        </div>
+        <div class="filter-group"><label>Страны</label><div class="input-placeholder"></div></div>
+        <div class="filter-group"><label>Место проведения</label><div class="input-placeholder"></div></div>
+        <div class="filter-group"><label>Сезон</label><div class="input-placeholder"></div></div>
+        <div class="filter-group"><label>Вид спорта</label><div class="input-placeholder"></div></div>
+
+        <div class="reset-btn-area">
+            <div class="reset-btn-placeholder">Очистить</div>
+        </div>
+    </aside>
+
+    <main class="main">
+        
+        <div class="header">
+            <div class="header-text">
+                <h1>История Олимпийских игр</h1>
+                <p>Данные с 1896 по 2016 год.</p>
+            </div>
+            
+            <div class="search-container">
+                <span class="search-label">Поиск Атлетов</span>
+                <div class="search-placeholder">
+                    <span style="margin-right: 6px;">🔍</span> 
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+
+            <div class="card kpi-card kpi-1">
+                <div class="icon-circle bg-total">🏆</div>
+                <div class="kpi-text-area"><span class="kpi-label">Всего медалей</span></div>
+            </div>
+            <div class="card kpi-card kpi-2">
+                <div class="icon-circle bg-gold">🥇</div>
+                <div class="kpi-text-area"><span class="kpi-label">Золотые</span></div>
+            </div>
+            <div class="card kpi-card kpi-3">
+                <div class="icon-circle bg-silver">🥈</div>
+                <div class="kpi-text-area"><span class="kpi-label">Серебряные</span></div>
+            </div>
+            <div class="card kpi-card kpi-4">
+                <div class="icon-circle bg-bronze">🥉</div>
+                <div class="kpi-text-area"><span class="kpi-label">Бронзовые</span></div>
+            </div>
+
+            <div class="card athletes-card">
+                <div><span class="card-sub" style="margin:0;">Всего</span><div style="font-size:12px; font-weight:700;">Атлетов</div></div>
+                <div style="font-size: 20px;">🏊</div>
+            </div>
+
+            <div class="card map-card">
+                <div class="card-head">
+                    <span class="card-title">Страны</span>
+                    <span class="card-sub">По количеству медалей</span>
+                </div>
+                <div class="pbi-area"></div>
+            </div>
+
+            <div class="card sports-card">
+                <div class="card-head">
+                    <span class="card-title">Топ видов спорта</span>
+                    <span class="card-sub">По количеству медалей</span>
+                </div>
+                <div class="pbi-area"></div>
+            </div>
+
+            <div class="card facts-card">
+                <div class="card-head">
+                    <span class="card-title">Олимп Факты</span>
+                </div>
+
+                <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; margin-bottom: 10px;">
+                    <span class="card-sub">ТОП СТРАН</span>
+                    <div class="pbi-area" style="flex: 1;"></div>
+                </div>
+
+                <div style="flex-shrink: 0; background: #f8fafc; border-left: 4px solid var(--gold); border-radius: 0 6px 6px 0; padding: 8px 10px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 4px;">
+                        <div style="width: 6px; height: 6px; background: var(--gold); border-radius: 50%;"></div>
+                        <span class="card-sub" style="margin: 0; font-size: 7px; color: var(--text-gray);">ЛИДЕР РЕЙТИНГА</span>
+                    </div>
+                    
+                    <div class="pbi-area" style="height: 45px;"></div>
+                </div>
+
+                <div style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                    <span class="card-sub">ТАБЛИЦА ЛИДЕРОВ</span>
+                    <div class="pbi-area" style="flex: 1;"></div>
+                </div>
+            </div>
+            <div class="card gender-card">
+                <div class="card-head-row">
+                    <div>
+                        <span class="card-title">Золотые медали</span>
+                        <span class="card-sub">По полу атлета</span>
+                    </div>
+                    
+                    <div class="mini-stat-group">
+                        <div class="mini-stat-item">
+                            <span class="mini-stat-val text-gold">&nbsp;</span> 
+                            <span class="mini-stat-lbl">Женщин<br>выиграли</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pbi-area"></div>
+            </div>
+
+            <div class="card age-card">
+                <div class="card-head-row">
+                    <div>
+                        <span class="card-title">Золотые медали</span>
+                        <span class="card-sub">По возрастной группе</span>
+                    </div>
+                    
+                    <div class="mini-stat-group">
+                        <div class="mini-stat-item">
+                            <span class="mini-stat-val">&nbsp;</span>
+                            <span class="mini-stat-lbl">Самый<br>молодой</span>
+                        </div>
+                        <div class="mini-stat-item">
+                            <span class="mini-stat-val">&nbsp;</span>
+                            <span class="mini-stat-lbl">Самый<br>взрослый</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pbi-area"></div>
+            </div>
+
+        </div> 
+    </main>
+</body>
+</html>
