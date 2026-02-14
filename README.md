@@ -18,18 +18,12 @@
 
 ## Скриншоты
 
-*(Вставьте сюда ссылки на изображения)*
-
 <img width="100%" alt="Детализация" src="https://github.com/user-attachments/assets/88eb2a7e-3687-4961-bc83-a19445e463c0" />
 
-### Работа HTML-карточки при фильтрации
 <img width="100%" alt="HTML Карточка" src="https://github.com/user-attachments/assets/755fa2da-c076-4a70-8c81-87a878324c37" />
 
-### Фильтры и Динамика
 <img width="100%" alt="Фильтры" src="https://github.com/user-attachments/assets/064c764c-a50e-40f6-a0b1-224e6c3c06ee" />
 
-### Демографический анализ
 <img width="100%" alt="Демография" src="https://github.com/user-attachments/assets/d976ba54-b590-4938-99a7-0f136b6a648d" />
 
-### Дополнительные виды
 <img width="100%" alt="Доп вид" src="https://github.com/user-attachments/assets/02a6db59-e38b-49e0-b9c4-a1ba075aa52e" />
