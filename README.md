@@ -2,7 +2,7 @@
 
 Интерактивный аналитический отчет, разработанный в Power BI.
 
-![Обложка дашборда](https://prnt.sc/-Ihq4Rbjkohw)
+![Обложка дашборда]([https://prnt.sc/-Ihq4Rbjkohw](https://github.com/user-attachments/assets/0c45ba26-a80d-4c78-8691-35536b5fd2fa))
 
 ## Описание проекта
 
